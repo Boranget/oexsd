@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * @author boranget
  * @date 2023/12/2
+ * 包装XSD Element节点的实体类
  */
 public class OexsdElement {
     private String elementName;
