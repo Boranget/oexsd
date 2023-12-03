@@ -8,6 +8,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
@@ -35,11 +36,13 @@ public class OexsdWriter {
             }
             // 创建目标文件
             File targetXsdFile = new File(newFolder, fileName + ".xsd");
-            FileWriter fileWriter = null;
+            // 这里不能使用FileWriter，否则会导致format中设置的编码无效
+            // FileWriter fileWriter = null;
+            FileOutputStream fileOutputStream = null;
             XMLWriter xmlWriter = null;
             try {
-                fileWriter = new FileWriter(targetXsdFile);
-                xmlWriter = new XMLWriter(fileWriter,format);
+                fileOutputStream = new FileOutputStream(targetXsdFile);
+                xmlWriter = new XMLWriter(fileOutputStream,format);
                 xmlWriter.write(document);
                 logger.info("xsd [ "+targetXsdFile.getAbsolutePath()+" ]写入成功");
             } catch (IOException e) {
@@ -53,9 +56,9 @@ public class OexsdWriter {
                         e.printStackTrace();
                     }
                 }
-                if (fileWriter != null) {
+                if (fileOutputStream != null) {
                     try {
-                        fileWriter.close();
+                        fileOutputStream.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
