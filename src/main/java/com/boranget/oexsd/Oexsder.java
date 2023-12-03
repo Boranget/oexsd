@@ -58,6 +58,7 @@ public class Oexsder {
         // 获取当前程序执行目录
         String currentDirectory = System.getProperty("user.dir");
         FileCopyUtil.copyFileFromJar("/init/frame.xlsx",currentDirectory);
+        FileCopyUtil.copyFileFromJar("/init/Readme.md",currentDirectory);
 
     }
 }
