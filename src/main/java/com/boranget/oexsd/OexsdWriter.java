@@ -28,7 +28,8 @@ public class OexsdWriter {
             // 设置编码格式
             format.setEncoding("utf-8");
             // 获取文件夹
-            File newFolder = new File(location, excelFileName.split("\\.")[0]);
+            // 这里不直接用excelFileName.split()是避免输入参数为相对路径（./file.xlsx）的情况下会被第一个.干扰
+            File newFolder = new File(location, new File(excelFileName).getName().split("\\.")[0]);
             if (!newFolder.exists()) {
                 newFolder.mkdirs();
             }
