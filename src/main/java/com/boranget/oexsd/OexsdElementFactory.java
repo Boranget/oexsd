@@ -1,5 +1,8 @@
 package com.boranget.oexsd;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -18,12 +21,14 @@ import java.util.List;
  * 用于将文件中的模板内容转为OexsdElement对象
  */
 public class OexsdElementFactory {
+    static final Logger logger = LogManager.getLogger(OexsdElementFactory.class);
     /**
      * 解析excel文件为OexsdElement列表
      * @param frameFile
      * @return
      */
     public static List<OexsdElement> readFromExcel(File frameFile) {
+
         List<OexsdElement> res = new ArrayList<>();
         FileInputStream fileInputStream = null;
         try {
@@ -31,10 +36,8 @@ public class OexsdElementFactory {
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
             // 获取sheet数用于循环
             final int numberOfSheets = xssfWorkbook.getNumberOfSheets();
-            System.out.println("即将处理共[" + numberOfSheets + "]个sheet");
             // 循环处理sheet
             for (int i = 0; i < numberOfSheets; i++) {
-                System.out.println("正在处理第[" + (i + 1) + "]个sheet");
                 final XSSFSheet currentSheet = xssfWorkbook.getSheetAt(i);
                 OexsdElement currentOexsdElementRoot = readFromSheet(currentSheet);
                 if (currentOexsdElementRoot != null) {
@@ -42,10 +45,10 @@ public class OexsdElementFactory {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("文件不存在");
+            logger.error("文件不存在");
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("出现了异常");
+            logger.error("出现了异常");
             e.printStackTrace();
         } finally {
             if (fileInputStream != null) {
@@ -68,7 +71,7 @@ public class OexsdElementFactory {
         // 获取总行数，总行数为最后一个行num+1
         int rowCount = currentSheet.getLastRowNum() + 1;
         if (rowCount <= 0) {
-            System.out.println("sheet为空");
+            logger.warn("sheet为空");
             return null;
         }
         // 读取第一行

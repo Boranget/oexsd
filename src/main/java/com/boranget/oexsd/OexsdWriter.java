@@ -1,5 +1,8 @@
 package com.boranget.oexsd;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
@@ -14,7 +17,7 @@ import java.util.Map;
  * @date 2023/12/3
  */
 public class OexsdWriter {
-
+    static final Logger logger = LogManager.getLogger(OexsdWriter.class);
     public static void writeOexsdsToFile(String location, String excelFileName, Map<String, Document> ori) {
 
         ori.forEach((fileName, document) -> {
@@ -37,7 +40,9 @@ public class OexsdWriter {
                 fileWriter = new FileWriter(targetXsdFile);
                 xmlWriter = new XMLWriter(fileWriter,format);
                 xmlWriter.write(document);
+                logger.info("xsd [ "+fileName+" ]写入成功");
             } catch (IOException e) {
+                logger.error("xsd [ "+fileName+" ]写入到文件时出现异常");
                 e.printStackTrace();
             } finally {
                 if (xmlWriter != null) {
