@@ -29,5 +29,6 @@ java -jar oexsd.jar 文件名
 |                |                               |                   | FourthString    | FS注释 |
 |                |                               | ThirdArray3       | 注释            |        |
 |                |                               |                   | FourthString    | FS注释 |
-|                | SecondString2                 | SecondString2注释 |                 |        |     |
+|                | SecondString2                 | SecondString2注释 |                 |        |
+
 如果字段有注释，则在字段名后一个单元格填写注释，没有注释留空即可
