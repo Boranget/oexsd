@@ -40,9 +40,9 @@ public class OexsdWriter {
                 fileWriter = new FileWriter(targetXsdFile);
                 xmlWriter = new XMLWriter(fileWriter,format);
                 xmlWriter.write(document);
-                logger.info("xsd [ "+fileName+" ]写入成功");
+                logger.info("xsd [ "+targetXsdFile.getAbsolutePath()+" ]写入成功");
             } catch (IOException e) {
-                logger.error("xsd [ "+fileName+" ]写入到文件时出现异常");
+                logger.error("xsd [ "+targetXsdFile.getAbsolutePath()+" ]写入到文件时出现异常");
                 e.printStackTrace();
             } finally {
                 if (xmlWriter != null) {

@@ -22,8 +22,10 @@ import java.util.List;
  */
 public class OexsdElementFactory {
     static final Logger logger = LogManager.getLogger(OexsdElementFactory.class);
+
     /**
      * 解析excel文件为OexsdElement列表
+     *
      * @param frameFile
      * @return
      */
@@ -32,6 +34,7 @@ public class OexsdElementFactory {
         List<OexsdElement> res = new ArrayList<>();
         FileInputStream fileInputStream = null;
         try {
+            logger.info("读入文件 [ " + frameFile + " ]");
             fileInputStream = new FileInputStream(frameFile);
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
             // 获取sheet数用于循环
@@ -64,6 +67,7 @@ public class OexsdElementFactory {
 
     /**
      * 将每个sheet解析为OexsdElement
+     *
      * @param currentSheet
      * @return
      */
@@ -78,6 +82,7 @@ public class OexsdElementFactory {
         XSSFRow currentRow = currentSheet.getRow(0);
         String rootName = currentRow.getCell(0).toString();
         String namespace = currentRow.getCell(1).toString();
+        logger.info("解析模板 [ " + rootName + " ]");
         OexsdElement oexsdRoot = new OexsdElement();
         oexsdRoot.setElementName(rootName);
         oexsdRoot.setNamespace(namespace);
@@ -109,9 +114,9 @@ public class OexsdElementFactory {
                     // 获取当前层
                     List<OexsdElement> currentLayer = null;
                     // 如果当前层为第一层，则直接存到第一层，因为第一层只有一种情况就是根元素的childList
-                    if(j == 0){
+                    if (j == 0) {
                         currentLayer = layerList.get(0);
-                    }else{
+                    } else {
                         // 否则取前一层最后一个元素的childList作为当前层
                         final List<OexsdElement> preOexsdElements = layerList.get(j - 1);
                         final OexsdElement preLayerLastElement = preOexsdElements.get(preOexsdElements.size() - 1);
@@ -122,11 +127,11 @@ public class OexsdElementFactory {
                         // 取前一层最后一个元素的childList作为当前层
                         currentLayer = preLayerLastElement.getChildrenList();
                         // 层列表更新，不更新的话当前子元素会存入parent的上一个元素的childList中的最后一个子元素的childlist......（水很深，把握不住）
-                        if(layerList.size()<=j){
+                        if (layerList.size() <= j) {
                             layerList.add(currentLayer);
-                        }else {
+                        } else {
                             // 如果层列表当前层所在位置已有列表则更新指针
-                            layerList.set(j,currentLayer);
+                            layerList.set(j, currentLayer);
                         }
 
                     }

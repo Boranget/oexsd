@@ -1,5 +1,7 @@
 package com.boranget.oexsd;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -15,6 +17,7 @@ import java.util.Map;
  * @date 2023/12/3
  */
 public class OexsdElementParser {
+    static final Logger logger = LogManager.getLogger(OexsdElementParser.class);
     /**
      * 创建命名空间用于全局使用
      */
@@ -41,6 +44,7 @@ public class OexsdElementParser {
     public static Document transformXsdFromOexsdElement(OexsdElement oexsdElement){
         final String elementName = oexsdElement.getElementName();
         final String namespace = oexsdElement.getNamespace();
+        logger.info("转换xsd [ "+elementName+" ]");
         Document document = DocumentHelper.createDocument();
         // 创建schema标签
         Element schema = new DefaultElement("schema",DEFAULT_NAMESPACE);

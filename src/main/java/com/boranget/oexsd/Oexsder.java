@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -15,14 +16,6 @@ import java.util.Map;
  */
 public class Oexsder {
     static final Logger logger = LogManager.getLogger(Oexsder.class);
-    /**
-     * 初始化参数
-     */
-    public static final String INIT_ARG = "init";
-    /**
-     * 默认模板文件
-     */
-    public static final String FILE_NAME = "frame.xlsx";
 
     /**
      * 程序入口
@@ -30,22 +23,14 @@ public class Oexsder {
      * @param args
      */
     public static void main(String[] args) {
-
-        String frameFileName = FILE_NAME;
-        if (args.length > 0) {
-            final String arg = args[0];
-            // 判断是否有参数init
-            if (INIT_ARG.equals(arg)) {
-                // init则将例子文件输出到运行目录
-                logger.info("正在进行初始化.....");
-                return;
-            }
-            // 否则认为该参数为文件名
-            logger.info("检测到指定文件名.....");
-            frameFileName = arg;
+        String frameFileName = null;
+        if (args.length == 0) {
+            // 如果没有参数，则初始化
+            logger.info("未检测到文件名，进行初始化...");
+            init();
+            return;
         }
-        // 如果没有参数，则读取工作目录下的frame.xlsx文件
-        logger.info("未检测到指定文件名，使用默认文件名："+FILE_NAME);
+        frameFileName = args[0];
         // 获取当前程序执行目录
         String currentDirectory = System.getProperty("user.dir");
         // 拼接路径
@@ -55,10 +40,24 @@ public class Oexsder {
             return;
         }
         // 调用解析文件方法
+        logger.info("开始解析文件");
         final List<OexsdElement> oexsdElements = OexsdElementFactory.readFromExcel(frameFile);
-        // 解析获取到的OexsdElement对象
+        logger.info("解析完成");
+        // 处理获取到的OexsdElement对象
+        logger.info("开始转换为xsd内容");
         final Map<String, Document> oriMap = OexsdElementParser.parseOexsdElements(oexsdElements);
+        logger.info("转换完成");
         // 输出到文件
+        logger.info("开始写入文件");
         OexsdWriter.writeOexsdsToFile(currentDirectory, frameFileName, oriMap);
+        logger.info("写入完成");
+    }
+
+    private static void init() {
+        // 将init文件夹下的内容输出到执行目录
+        // 获取当前程序执行目录
+        String currentDirectory = System.getProperty("user.dir");
+        FileCopyUtil.copyFileFromJar("/init/frame.xlsx",currentDirectory);
+
     }
 }
