@@ -80,12 +80,21 @@ public class OexsdElementFactory {
         }
         // 读取第一行
         XSSFRow currentRow = currentSheet.getRow(0);
+        // 读取根元素名
         String rootName = currentRow.getCell(0).toString();
+        // 读取命名空间
         String namespace = currentRow.getCell(1).toString();
+        // 读取根元素描述
+        String rootDesc = null;
+        final XSSFCell rootDescCell = currentRow.getCell(2);
+        if (rootDescCell != null && !"".equals(rootDescCell.toString().trim())) {
+            rootDesc = rootDescCell.toString();
+        }
         logger.info("解析模板 [ " + rootName + " ]");
         OexsdElement oexsdRoot = new OexsdElement();
         oexsdRoot.setElementName(rootName);
         oexsdRoot.setNamespace(namespace);
+        oexsdRoot.setElementDesc(rootDesc);
         oexsdRoot.setChildrenList(new ArrayList<>());
         // 初始化层列表
         List<List<OexsdElement>> layerList = new ArrayList<>();

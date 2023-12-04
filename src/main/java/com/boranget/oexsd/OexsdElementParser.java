@@ -44,6 +44,7 @@ public class OexsdElementParser {
     public static Document transformXsdFromOexsdElement(OexsdElement oexsdElement){
         final String elementName = oexsdElement.getElementName();
         final String namespace = oexsdElement.getNamespace();
+        final String rootDesc = oexsdElement.getElementDesc();
         logger.info("转换xsd [ "+elementName+" ]");
         Document document = DocumentHelper.createDocument();
         // 创建schema标签
@@ -53,12 +54,20 @@ public class OexsdElementParser {
         schema.addNamespace("",namespace);
         schema.addNamespace("xsd","http://www.w3.org/2001/XMLSchema");
         // 包装
-        Element sequence = new DefaultElement("sequence", DEFAULT_NAMESPACE);
         Element complexType = new DefaultElement("complexType", DEFAULT_NAMESPACE);
+        // 判断根元素是否有注释&添加
+        if(rootDesc!=null&&!"".equals(rootDesc.trim())){
+            Element documentation = new DefaultElement("documentation",DEFAULT_NAMESPACE);
+            documentation.addText(rootDesc);
+            Element annotation = new DefaultElement("annotation",DEFAULT_NAMESPACE);
+            annotation.add(documentation);
+            complexType.add(annotation);
+        }
+        Element sequence = new DefaultElement("sequence", DEFAULT_NAMESPACE);
         complexType.add(sequence);
         complexType.addAttribute("name",elementName);
-        final List<OexsdElement> childrenList = oexsdElement.getChildrenList();
         // 存入子元素
+        final List<OexsdElement> childrenList = oexsdElement.getChildrenList();
         for(OexsdElement oexsdElementChild :childrenList){
             sequence.add(getXmlElement(oexsdElementChild));
         }
@@ -78,9 +87,9 @@ public class OexsdElementParser {
         element.addAttribute("name",oexsdElement.getElementName());
         // 添加描述
         String desc = oexsdElement.getElementDesc();
-        if(desc!=null&&!"".equals(desc)){
+        if(desc!=null&&!"".equals(desc.trim())){
             Element documentation = new DefaultElement("documentation",DEFAULT_NAMESPACE);
-            documentation.addText(oexsdElement.getElementDesc());
+            documentation.addText(desc);
             Element annotation = new DefaultElement("annotation",DEFAULT_NAMESPACE);
             annotation.add(documentation);
             element.add(annotation);
