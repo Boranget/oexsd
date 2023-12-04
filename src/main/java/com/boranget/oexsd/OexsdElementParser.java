@@ -59,6 +59,7 @@ public class OexsdElementParser {
         if(rootDesc!=null&&!"".equals(rootDesc.trim())){
             Element documentation = new DefaultElement("documentation",DEFAULT_NAMESPACE);
             documentation.addText(rootDesc);
+            documentation.addAttribute("xml:lang","EN");
             Element annotation = new DefaultElement("annotation",DEFAULT_NAMESPACE);
             annotation.add(documentation);
             complexType.add(annotation);
