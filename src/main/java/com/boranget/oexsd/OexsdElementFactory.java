@@ -96,6 +96,8 @@ public class OexsdElementFactory {
         oexsdRoot.setNamespace(namespace);
         oexsdRoot.setElementDesc(rootDesc);
         oexsdRoot.setChildrenList(new ArrayList<>());
+        // 存储sheet名作为文件名
+        oexsdRoot.setFileName(currentSheet.getSheetName());
         // 初始化层列表
         List<List<OexsdElement>> layerList = new ArrayList<>();
         layerList.add(oexsdRoot.getChildrenList());

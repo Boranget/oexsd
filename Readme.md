@@ -20,6 +20,8 @@ java -jar oexsd.jar 文件名
 
 - 可同时编辑多个sheet，会生成多个文件
 
+- sheet名会作为生成的xsd文件的文件名
+
 | DT_OEXSD_TEST2 | http://www.democz.com/collect |                   |                 |        |
 | -------------- | ----------------------------- | ----------------- | --------------- | ------ |
 | TopString      | TS注释                        |                   |                 |        |

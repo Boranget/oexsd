@@ -32,7 +32,10 @@ public class OexsdElementParser {
         Map<String,Document> res = new HashMap<>();
         for(OexsdElement oexsdElement:oexsdElements){
             final Document parseRes = transformXsdFromOexsdElement(oexsdElement);
-            res.put(oexsdElement.getElementName(),parseRes);
+            // 之前使用根元素名作为生成的xsd的文件名，但是有可能会有同一个表中多个同名根元素的情况
+//            res.put(oexsdElement.getElementName(),parseRes);
+            // 所以在根元素中存储sheet名作为表名
+            res.put(oexsdElement.getFileName(),parseRes);
         }
         return res;
     }
