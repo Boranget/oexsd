@@ -81,14 +81,14 @@ public class OexsdElementFactory {
         // 读取第一行
         XSSFRow currentRow = currentSheet.getRow(0);
         // 读取根元素名
-        String rootName = currentRow.getCell(0).toString();
+        String rootName = currentRow.getCell(0).toString().trim();
         // 读取命名空间
-        String namespace = currentRow.getCell(1).toString();
+        String namespace = currentRow.getCell(1).toString().trim();
         // 读取根元素描述
         String rootDesc = null;
         final XSSFCell rootDescCell = currentRow.getCell(2);
         if (rootDescCell != null && !"".equals(rootDescCell.toString().trim())) {
-            rootDesc = rootDescCell.toString();
+            rootDesc = rootDescCell.toString().trim();
         }
         logger.info("解析模板 [ " + rootName + " ]");
         OexsdElement oexsdRoot = new OexsdElement();
@@ -111,7 +111,7 @@ public class OexsdElementFactory {
                 // 获取单元格值
                 final XSSFCell cell = currentRow.getCell(j);
                 if (cell != null) {
-                    final String elementName = cell.toString();
+                    final String elementName = cell.toString().trim();
                     // 解析主逻辑
                     // 创建一个新的OexsdElement
                     OexsdElement oexsdElement = new OexsdElement();
@@ -119,7 +119,7 @@ public class OexsdElementFactory {
                     // 判断是否有注释
                     final XSSFCell descCell = currentRow.getCell(j + 1);
                     if (descCell != null && !"".equals(descCell.toString().trim())) {
-                        final String elementDesc = descCell.toString();
+                        final String elementDesc = descCell.toString().trim();
                         oexsdElement.setElementDesc(elementDesc);
                     }
                     // 获取当前层
