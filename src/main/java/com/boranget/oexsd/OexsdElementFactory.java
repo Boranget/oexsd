@@ -110,7 +110,10 @@ public class OexsdElementFactory {
             for (int j = 0; j < cellCount; j++) {
                 // 获取单元格值
                 final XSSFCell cell = currentRow.getCell(j);
-                if (cell != null) {
+                // 判断null是因为在实际值之前有完全为空的单元格，这种单元格读出来是空
+                // 而如果碰到有格式的单元格，即使其内容为空，cell也不会为空，故这里还需要判断下是否为空串
+                // 本来以为格式干扰会很难解决，好在我当时的逻辑就是分层的，只要这里进行格式判断就可以，我真牛逼
+                if (cell != null && !cell.toString().trim().equals("")) {
                     final String elementName = cell.toString().trim();
                     // 解析主逻辑
                     // 创建一个新的OexsdElement
@@ -149,6 +152,7 @@ public class OexsdElementFactory {
                     // 将当前元素加入当前层
                     currentLayer.add(oexsdElement);
                     // 既然当前行已经找到值了，就没有必要往下走了，因为一行只有一个元素
+                    // 我这个逻辑也很牛逼
                     continue everyRow;
                 }
             }
