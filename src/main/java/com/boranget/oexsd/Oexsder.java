@@ -30,7 +30,20 @@ public class Oexsder {
             init();
             return;
         }
-        frameFileName = args[0];
+        if (args.length == 1){
+            // 参数为文件名
+            frameFileName = args[0];
+        }else if(args.length==2){
+            // 第一个参数为指定当前模式
+            if("-m".equalsIgnoreCase(args[0])){
+                GlobalStatus.CURRENT_MODE = GlobalStatus.MESSAGE_TYPE;
+            }else {
+                logger.error("参数错误");
+                return;
+            }
+            // 第二个参数为文件名
+            frameFileName = args[1];
+        }
         // 获取当前程序执行目录
         String currentDirectory = System.getProperty("user.dir");
         // 拼接路径

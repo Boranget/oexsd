@@ -56,7 +56,15 @@ public class OexsdElementParser {
         schema.addAttribute("targetNamespace",namespace);
         schema.addNamespace("",namespace);
         schema.addNamespace("xsd","http://www.w3.org/2001/XMLSchema");
-        // 包装
+        // MT 元素构建
+        if (GlobalStatus.CURRENT_MODE.equals(GlobalStatus.MESSAGE_TYPE)){
+            Element element = new DefaultElement("element", DEFAULT_NAMESPACE);
+            String mtName = "MT"+elementName.substring(2,elementName.length()-1);
+            element.addAttribute("name",mtName);
+            element.addAttribute("type",elementName);
+            schema.add(element);
+        }
+        // DT包装
         Element complexType = new DefaultElement("complexType", DEFAULT_NAMESPACE);
         // 判断根元素是否有注释&添加
         if(rootDesc!=null&&!"".equals(rootDesc.trim())){
